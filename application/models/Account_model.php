@@ -14,15 +14,72 @@ class Account_model extends CI_Model
 
     function getUserAccount($username, $password)
     {
+        try {
+            $this->db->select('*');
+            $this->db->from('user_auth');
+            $this->db->where('name', $username);
+            $this->db->where('password', md5($password));
+            $query = $this->db->get()->row();
+            return $query;
 
-        $this->db->select('zoho_accounts.id, zoho_accounts.account_name, zoho_contacts.zportal1_username as username, zoho_contacts.setuppw as password');
-        $this->db->from('zoho_accounts');
-        $this->db->join("zoho_contacts", "zoho_contacts.account_name=zoho_accounts.id");
-        $this->db->where('setuppw', $password);
-        $this->db->where("zportal1_username", $username);
-        $query = $this->db->get()->row();
-        return $query;
+            /* $this->db->select('zoho_accounts.id, zoho_accounts.account_name, zoho_contacts.zportal1_username as username, zoho_contacts.setuppw as password');
+            $this->db->from('zoho_accounts');
+            $this->db->join("zoho_contacts", "zoho_contacts.account_number=zoho_accounts.id");
+            $this->db->where('setuppw', $password);
+            $this->db->where("zportal1_username", $username);
+            $query = $this->db->get()->row();
+            return $query; */
+
+            $this->db->select('zoho_contacts.zportal1_username as username, zoho_contacts.setuppw as password');
+            $this->db->from('zoho_contacts');
+            // $this->db->join("zoho_contacts", "zoho_contacts.account_number=zoho_accounts.id");
+            $this->db->where('setuppw', $password);
+            $this->db->where("zportal1_username", $username);
+            $query = $this->db->get()->row();
+            return $query;
+        } catch (Exception $th) {
+            throw $th->getMessage();
+        }
     }
+
+    /**
+     * change password
+     * @param {string} $email
+     * @param {string} $password
+     * @param {string} $new_password
+     * @return mixed|boolean
+     */
+    function changePassword($email, $password, $new_password)
+    {
+        try {
+            $is_valid_user = $this->isValidUser($email, $password);
+            
+            if($is_valid_user) {
+                $this->db->update('user_auth', ['password' => md5($new_password)], 'user_id=' . $is_valid_user->user_id);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw $e->getMessage();
+        }
+    }
+
+    /**
+     * user validaton from DB
+     * @param {string} $email
+     * @param {string} $password
+     * @return boolean
+     */
+    private function isValidUser($email, $password) {
+        $this->db->where('email', $email);
+        $this->db->where('password', md5($password));
+        $query = $this->db->get('user_auth')->row();
+        
+        if($query) return $query;
+        else return false;
+    }
+
     function getUserAccountById($userid)
     {
         $this->db->select('*');
