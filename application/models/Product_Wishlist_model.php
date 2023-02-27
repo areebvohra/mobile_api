@@ -32,6 +32,7 @@ class Product_Wishlist_model extends CI_Model
     function addProductInWishtlist($data)
     {
         try {
+            $data['is_in_wishlist'] = 1;
             $query = $this->db->insert($this->table, $data);
             return $query;
         } catch (Exception $e) {
@@ -58,9 +59,12 @@ class Product_Wishlist_model extends CI_Model
 
     function toggleIsInWishList($data)
     {
-        $is_in_wishlist = ($data->is_in_wishlist == 1) ? 0 : 1;
-        try {            
-            $this->db->where('id', $data->id);
+        try {
+            $is_in_wishlist = $is_in_wishlist == 1 ? 0 : 1;
+            $this->db->where('building_id', $data['building_id']);
+            $this->db->where('room_id', $data['room_id']);
+            $this->db->where('product_category_id', $data['product_category_id']);
+            $this->db->where('product_id', $data['product_id']);
             $query = $this->db->update($this->table, ['is_in_wishlist' => $is_in_wishlist]);
 
             return $query;
@@ -96,8 +100,12 @@ class Product_Wishlist_model extends CI_Model
     {
         try {
             if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
-            if($filter['room_id']) $this->db->where('room_id', $filter['room_id']);
             if($filter['product_category_id']) $this->db->where('product_category_id', $filter['product_category_id']);
+            if($filter['room_id']) {
+                $this->db->select('product_wishlist.*, zoho_rooms.name as room_name');
+                $this->db->where('room_id', $filter['room_id']);
+                $this->db->join('zoho_rooms', 'zoho_rooms.id = product_wishlist.room_id');
+            }
             $query = $this->db->get($this->table)->result();
             return $query;
         } catch (Exception $e) {
@@ -105,13 +113,35 @@ class Product_Wishlist_model extends CI_Model
         }
     }
 
-    function getUniqueProduct($data) 
+    /**
+     * get produc by building, room and product
+     */
+    function getProductByBRCP($data)
     {
         try {
             $this->db->where('building_id', $data['building_id']);
             $this->db->where('room_id', $data['room_id']);
             $this->db->where('product_category_id', $data['product_category_id']);
+            $this->db->where('product_id', $data['product_id']);
             $query = $this->db->get($this->table)->row();
+            return $query;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * reset is_in_wishlist by building room and category
+     * @param $data Array
+     */
+    function resetWishlistByBRC($data)
+    {
+        try {
+            $this->db->where('building_id', $data['building_id']);
+            $this->db->where('room_id', $data['room_id']);
+            $this->db->where('product_category_id', $data['product_category_id']);
+            $query = $this->db->update($this->table, ['is_in_wishlist' => 0]);
+
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();

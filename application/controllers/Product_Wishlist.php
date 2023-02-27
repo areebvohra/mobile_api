@@ -68,7 +68,6 @@ class Product_Wishlist extends BASE_Controller
             $errors_array = validation_errors_to_array($config);
             $this->response(['status' => 'failed', 'validation_message' => $errors_array]);
         } else {
-            
             $this->load->model('Product_model');
             $product = $this->Product_model->getProductByID($this->input->post('product_id'));
             
@@ -77,10 +76,12 @@ class Product_Wishlist extends BASE_Controller
                 $data['unit_price'] = $product->price;
                 $data['total_price'] = $product->price * $this->input->post('quantity');
                 
-                // $result = $this->Product_Wishlist_model->updateProductWishtlist($data);
-                $result = $this->Product_Wishlist_model->getUniqueProduct($data);
+                // reset wishlist
+                $this->Product_Wishlist_model->resetWishlistByBRC($data);
+
+                $result = $this->Product_Wishlist_model->getProductByBRCP($data);
                 if($result) {                    
-                    $this->Product_Wishlist_model->toggleIsInWishList($result);
+                    $this->Product_Wishlist_model->toggleIsInWishList($data);
                     $this->response(array('status' => 'success', 'message' => 'product udpated successfully'));
                 }
                 
@@ -96,7 +97,7 @@ class Product_Wishlist extends BASE_Controller
      * product wishlist
      */
     public function getWishlist_get($buildingid = false, $roomid = false, $productid = false)
-    {        
+    {
         $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_category_id' => $productid];
         $data = $this->Product_Wishlist_model->getProductByFilteration($filter);
 
