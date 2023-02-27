@@ -47,6 +47,11 @@ class Product_Wishlist extends BASE_Controller
                 'rules' => 'trim|required|integer'
             ),
             array(
+                'field' => 'product_category_id',
+                'label' => 'product_category_id',
+                'rules' => 'trim|required|integer'
+            ),
+            array(
                 'field' => 'product_id',
                 'label' => 'product_id',
                 'rules' => 'trim|required|integer'
@@ -92,7 +97,7 @@ class Product_Wishlist extends BASE_Controller
      */
     public function getWishlist_get($buildingid = false, $roomid = false, $productid = false)
     {        
-        $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_id' => $productid];
+        $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_category_id' => $productid];
         $data = $this->Product_Wishlist_model->getProductByFilteration($filter);
 
         if($data) {

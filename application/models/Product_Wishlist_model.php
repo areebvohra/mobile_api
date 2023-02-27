@@ -85,7 +85,7 @@ class Product_Wishlist_model extends CI_Model
         try {
             if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
             if($filter['room_id']) $this->db->where('room_id', $filter['room_id']);
-            if($filter['product_id']) $this->db->where('product_id', $filter['product_id']);
+            if($filter['product_category_id']) $this->db->where('product_category_id', $filter['product_category_id']);
             $query = $this->db->get($this->table)->result();
             return $query;
         } catch (Exception $e) {
@@ -98,7 +98,7 @@ class Product_Wishlist_model extends CI_Model
         try {
             $this->db->where('building_id', $data['building_id']);
             $this->db->where('room_id', $data['room_id']);
-            $this->db->where('product_id', $data['product_id']);
+            $this->db->where('product_category_id', $data['product_category_id']);
             $query = $this->db->get($this->table)->row();
             return $query;
         } catch (Exception $e) {
