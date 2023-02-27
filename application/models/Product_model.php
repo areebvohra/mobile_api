@@ -11,7 +11,7 @@ if (!defined('BASEPATH'))
 
 class Product_model extends CI_Model
 {
-    protected $table = 'product';
+    protected $table = 'products';
 
     function __construct()
     {
@@ -22,10 +22,10 @@ class Product_model extends CI_Model
     {
         try {
             $this->db->select('*');
-
+            $this->db->from($this->table);
             if($category_id) { $this->db->where('category_id', $category_id); }
-            
-            $query = $this->db->get('products')->result();
+
+            $query = $this->db->get()->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
@@ -38,7 +38,7 @@ class Product_model extends CI_Model
      */
     function createProduct($data) {
         try {
-            $query = $this->db->insert('products', $data);
+            $query = $this->db->insert($this->table, $data);
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
@@ -51,7 +51,7 @@ class Product_model extends CI_Model
      */
     function updateProduct($data) {
         try {
-            $query = $this->db->update('products', $data);
+            $query = $this->db->update($this->table, $data);
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
@@ -65,7 +65,7 @@ class Product_model extends CI_Model
     function getProductByID($id) {
         try {
             $this->db->where('id', $id);
-            $query = $this->db->get('products')->row();
+            $query = $this->db->get($this->table)->row();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();

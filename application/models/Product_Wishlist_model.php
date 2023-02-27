@@ -80,6 +80,18 @@ class Product_Wishlist_model extends CI_Model
         }
     }
 
+    function getWhisListByProductAndCategoryID($category_id, $product_id) 
+    {
+        try {
+            $this->db->where('product_category_id', $category_id);
+            $this->db->where('product_id', $product_id);
+            $query = $this->db->get($this->table)->row();
+            return $query;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     function getProductByFilteration($filter) 
     {
         try {
