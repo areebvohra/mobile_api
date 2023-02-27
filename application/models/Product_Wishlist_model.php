@@ -80,16 +80,29 @@ class Product_Wishlist_model extends CI_Model
         }
     }
 
-    function getUniqueBuildingProduct($data) 
+    function getProductByFilteration($filter) 
     {
         try {
-            if($data['building_id']) $this->db->where('building_id', $data['building_id']);
-            if($data['room_id']) $this->db->where('room_id', $data['room_id']);
-            if($data['product_id']) $this->db->where('product_id', $data['product_id']);
+            if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
+            if($filter['room_id']) $this->db->where('room_id', $filter['room_id']);
+            if($filter['product_id']) $this->db->where('product_id', $filter['product_id']);
             $query = $this->db->get($this->table)->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
         }
-    }  
+    }
+
+    function getUniqueProduct($data) 
+    {
+        try {
+            $this->db->where('building_id', $data['building_id']);
+            $this->db->where('room_id', $data['room_id']);
+            $this->db->where('product_id', $data['product_id']);
+            $query = $this->db->get($this->table)->row();
+            return $query;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }

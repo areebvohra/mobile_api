@@ -73,7 +73,7 @@ class Product_Wishlist extends BASE_Controller
                 $data['total_price'] = $product->price * $this->input->post('quantity');
                 
                 // $result = $this->Product_Wishlist_model->updateProductWishtlist($data);
-                $result = $this->Product_Wishlist_model->getUniqueBuildingProduct($data);                
+                $result = $this->Product_Wishlist_model->getUniqueProduct($data);
                 if($result) {                    
                     $this->Product_Wishlist_model->toggleIsInWishList($result);
                     $this->response(array('status' => 'success', 'message' => 'product udpated successfully'));
@@ -92,8 +92,8 @@ class Product_Wishlist extends BASE_Controller
      */
     public function getWishlist_get($buildingid = false, $roomid = false, $productid = false)
     {        
-        $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_id' => $productid];        
-        $data = $this->Product_Wishlist_model->getUniqueBuildingProduct($filter);        
+        $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_id' => $productid];
+        $data = $this->Product_Wishlist_model->getProductByFilteration($filter);
 
         if($data) {
             $this->response(array('status' => 'success', 'data' => $data));
