@@ -73,11 +73,11 @@ class Product_Wishlist extends BASE_Controller
                 $data['total_price'] = $product->price * $this->input->post('quantity');
                 
                 // $result = $this->Product_Wishlist_model->updateProductWishtlist($data);
-                $result = $this->Product_Wishlist_model->getUniqueBuildingProduct($data);
-                
-                if($result) {
-                    $this->response(array('status' => 'success', 'message' => 'product already added'));
-                } 
+                $result = $this->Product_Wishlist_model->getUniqueBuildingProduct($data);                
+                if($result) {                    
+                    $this->Product_Wishlist_model->toggleIsInWishList($result);
+                    $this->response(array('status' => 'success', 'message' => 'product udpated successfully'));
+                }
                 
                 $this->Product_Wishlist_model->addProductInWishtlist($data);
                 $this->response(array('status' => 'success', 'message' => 'product added successfully'));
@@ -85,5 +85,20 @@ class Product_Wishlist extends BASE_Controller
                 $this->response(array('status' => 'failed', 'message' => 'invalid Product ID'));
             }                        
         }                
+    }
+
+    /**
+     * product wishlist
+     */
+    public function getWishlist_get($buildingid = false, $roomid = false, $productid = false)
+    {        
+        $filter = ['building_id' => $buildingid, 'room_id' => $roomid, 'product_id' => $productid];        
+        $data = $this->Product_Wishlist_model->getUniqueBuildingProduct($filter);        
+
+        if($data) {
+            $this->response(array('status' => 'success', 'data' => $data));
+        } else {
+            $this->response(array('status' => 'success', 'message' => 'data is not present'));
+        }        
     }
 }
