@@ -29,7 +29,7 @@ class Product extends BASE_Controller
         
         $this->load->model('Product_Wishlist_model');
         for ($i=0; $i < count($products); $i++) {
-            $is_in_wishlist = $this->Product_Wishlist_model->getWhisListByProductAndCategoryID($products[$i]->category_id, $products[$i]->id);                        
+            $is_in_wishlist = $this->Product_Wishlist_model->getWhisListByProductAndCategoryID($products[$i]->category_id, $products[$i]->id);
             $products[$i]->is_in_wishlist = $is_in_wishlist->is_in_wishlist == '1' ? 1 : 0;
         }
         

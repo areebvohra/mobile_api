@@ -60,7 +60,7 @@ class Product_Wishlist_model extends CI_Model
     function toggleIsInWishList($data)
     {
         try {
-            $is_in_wishlist = $is_in_wishlist == 1 ? 0 : 1;
+            $is_in_wishlist = ($data['is_in_wishlist'] == 1) ? 0 : 1;
             $this->db->where('building_id', $data['building_id']);
             $this->db->where('room_id', $data['room_id']);
             $this->db->where('product_category_id', $data['product_category_id']);
@@ -99,15 +99,25 @@ class Product_Wishlist_model extends CI_Model
     function getProductByFilteration($filter) 
     {
         try {
+            $select = 'products.*, product_wishlist.*';
             if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
-            if($filter['product_category_id']) $this->db->where('product_category_id', $filter['product_category_id']);
+            
             if($filter['room_id']) {
-                $this->db->select('product_wishlist.*, zoho_rooms.name as room_name');
+                $select .= ', zoho_rooms.name as room_name';                
                 $this->db->where('room_id', $filter['room_id']);
                 $this->db->join('zoho_rooms', 'zoho_rooms.id = product_wishlist.room_id');
             }
-            $query = $this->db->get($this->table)->result();
-            return $query;
+            
+            if($filter['product_category_id']) {
+                $this->db->where('product_category_id', $filter['product_category_id']);
+            }
+
+            if(!$filter['product_category_id']) $this->db->where('is_in_wishlist', 1);
+
+            $this->db->select($select);
+            $this->db->join('products', 'products.id = product_wishlist.product_id');
+
+            return $this->db->get($this->table)->result();            
         } catch (Exception $e) {
             return $e->getMessage();
         }
