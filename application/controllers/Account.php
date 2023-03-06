@@ -39,11 +39,10 @@ class Account extends BASE_Controller
         } else {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
-            $uresult = $this->Account_model->getUserAccount($username, $password);
-            
+            $uresult = $this->Account_model->getUserAccount($username, $password);            
             // $this->response(array('status' => 'success', 'data' => $uresult));
             
-            if (!empty($uresult)) {
+            if ($uresult) {
                 /* $token = generateToken(['username' => $uresult->username, 'password' => $uresult->password, 'user_id' => $uresult->id]);
                 $response = array(
                     'name' => $uresult->account_name,

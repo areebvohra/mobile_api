@@ -15,12 +15,21 @@ class Account_model extends CI_Model
     function getUserAccount($username, $password)
     {
         try {
+            // $this->load->library('password');
+            
+
             $this->db->select('*');
             $this->db->from('user_auth');
-            $this->db->where('name', $username);
-            $this->db->where('password', md5($password));
-            $query = $this->db->get()->row();
-            return $query;
+            // $this->db->where('name', $username);
+            $this->db->where('username', $username);
+            // $this->db->where('password', md5($password));
+            $query = $this->db->get()->row();            
+            
+            if($query && password_verify($password, $query->password)) {
+                return $query; 
+            } else {
+                return false;
+            }
 
             /* $this->db->select('zoho_accounts.id, zoho_accounts.account_name, zoho_contacts.zportal1_username as username, zoho_contacts.setuppw as password');
             $this->db->from('zoho_accounts');
