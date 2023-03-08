@@ -11,7 +11,7 @@ if (!defined('BASEPATH'))
 
 class Product_model extends CI_Model
 {
-    protected $table = 'products';
+    protected $table = 'ci_products';
 
     function __construct()
     {

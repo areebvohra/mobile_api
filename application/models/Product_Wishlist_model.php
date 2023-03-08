@@ -11,7 +11,7 @@ if (!defined('BASEPATH'))
 
 class Product_Wishlist_model extends CI_Model
 {
-    protected $table = 'product_wishlist';
+    protected $table = 'ci_product_wishlist';
 
     function __construct()
     {
@@ -99,13 +99,13 @@ class Product_Wishlist_model extends CI_Model
     function getProductByFilteration($filter) 
     {
         try {
-            $select = 'products.*, product_wishlist.*';
+            $select = 'ci_products.*, ci_product_wishlist.*';
             if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
             
             if($filter['room_id']) {
                 $select .= ', zoho_rooms.name as room_name';                
                 $this->db->where('room_id', $filter['room_id']);
-                $this->db->join('zoho_rooms', 'zoho_rooms.id = product_wishlist.room_id');
+                $this->db->join('zoho_rooms', 'zoho_rooms.id = ci_product_wishlist.room_id');
             }
             
             if($filter['product_category_id']) {
@@ -115,7 +115,7 @@ class Product_Wishlist_model extends CI_Model
             if(!$filter['product_category_id']) $this->db->where('is_in_wishlist', 1);
 
             $this->db->select($select);
-            $this->db->join('products', 'products.id = product_wishlist.product_id');
+            $this->db->join('ci_products', 'ci_products.id = ci_product_wishlist.product_id');
 
             return $this->db->get($this->table)->result();            
         } catch (Exception $e) {

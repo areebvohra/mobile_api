@@ -21,7 +21,7 @@ class Product_Category_model extends CI_Model
     {
         try {
             $this->db->select('*');
-            $query = $this->db->get('product_category')->result();
+            $query = $this->db->get('ci_product_category')->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
@@ -32,7 +32,7 @@ class Product_Category_model extends CI_Model
     {
         try {
             $this->db->select('*');
-            $query = $this->db->get('product_category')->result();
+            $query = $this->db->get('ci_product_category')->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
