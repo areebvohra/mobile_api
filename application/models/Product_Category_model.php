@@ -20,8 +20,10 @@ class Product_Category_model extends CI_Model
     function getProductCategory()
     {
         try {
-            $this->db->select('*');
-            $query = $this->db->get('ci_product_category')->result();
+            $this->db->select('id, name, code, description');
+            // $query = $this->db->get('ci_product_category')->result();
+            $this->db->where('status', 1);
+            $query = $this->db->get('product_category')->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();
@@ -32,7 +34,7 @@ class Product_Category_model extends CI_Model
     {
         try {
             $this->db->select('*');
-            $query = $this->db->get('ci_product_category')->result();
+            $query = $this->db->get('product_category')->result();
             return $query;
         } catch (Exception $e) {
             return $e->getMessage();

@@ -24,14 +24,14 @@ class Product extends BASE_Controller
      * product list
      */
     public function list_get($category_id = false)
-    {        
+    {
         $products = $this->Product_model->getProducts($category_id);
         
-        $this->load->model('Product_Wishlist_model');
+        /* $this->load->model('Product_Wishlist_model');
         for ($i=0; $i < count($products); $i++) {
             $is_in_wishlist = $this->Product_Wishlist_model->getWhisListByProductAndCategoryID($products[$i]->category_id, $products[$i]->id);
             $products[$i]->is_in_wishlist = $is_in_wishlist->is_in_wishlist == '1' ? 1 : 0;
-        }
+        } */
         
         $this->response(array('status' => 'success', 'data' => $products));
     }

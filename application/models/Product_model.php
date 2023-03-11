@@ -11,7 +11,8 @@ if (!defined('BASEPATH'))
 
 class Product_model extends CI_Model
 {
-    protected $table = 'ci_products';
+    // protected $table = 'ci_products';
+    protected $table = 'products';
 
     function __construct()
     {
@@ -21,9 +22,9 @@ class Product_model extends CI_Model
     function getProducts($category_id)
     {
         try {
-            $this->db->select('*');
+            $this->db->select('id, name, sku, details, description, price, image_path');
             $this->db->from($this->table);
-            if($category_id) { $this->db->where('category_id', $category_id); }
+            if($category_id) { $this->db->where('product_category_id', $category_id); }
 
             $query = $this->db->get()->result();
             return $query;
