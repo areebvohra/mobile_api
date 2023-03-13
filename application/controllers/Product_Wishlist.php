@@ -37,6 +37,11 @@ class Product_Wishlist extends BASE_Controller
         // form validation
         $config = [
             array(
+                'field' => 'user_id',
+                'label' => 'User ID',
+                'rules' => 'trim|required|integer',
+            ),
+            array(
                 'field' => 'building_id',
                 'label' => 'Building ID',
                 'rules' => 'trim|required|integer',
