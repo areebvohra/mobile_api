@@ -6,7 +6,6 @@ class Account extends BASE_Controller
 {
     public function __construct()
     {
-        
         parent::__construct();
         $this->load->model('Account_model');
     }
@@ -49,10 +48,11 @@ class Account extends BASE_Controller
                     "user_id" => $uresult->id
                 ); */
 
-                $token = generateToken(['username' => $uresult->name, 'password' => $uresult->password, 'user_id' => $uresult->zoho_id]);
+                $token = generateToken(['username' => $uresult->name, 'password' => $uresult->password, 'user_id' => $uresult->id]);
                 $response = array(
                     'name' => $uresult->name,
-                    "user_id" => $uresult->zoho_id
+                    // "user_id" => $uresult->zoho_id
+                    "user_id" => $uresult->id
                 );
                 
                 $this->response(array('status' => 'success', 'message' => 'Login success', 'token' => $token, 'data' => $response));

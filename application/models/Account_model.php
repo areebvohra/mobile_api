@@ -92,16 +92,24 @@ class Account_model extends CI_Model
     function getUserAccountById($userid)
     {
         $this->db->select('*');
-        $this->db->from('zoho_accounts');
+        $this->db->from('user_auth');
         $this->db->where("id", $userid);
         $query = $this->db->get()->row();
         return $query;
+
+        /* $this->db->select('*');
+        $this->db->from('zoho_accounts');
+        $this->db->where("id", $userid);
+        $query = $this->db->get()->row();
+        return $query; */
     }
     function getHome($id)
-    {
+    {                
         $this->db->select('*');
-        $this->db->from('zoho_buildings');
-        $this->db->where("account_name", $id);
+        /* $this->db->from('zoho_buildings');
+        $this->db->where("account_name", $id); */
+        $this->db->from('buildings');
+        $this->db->where('user_id', $id);
         $query = $this->db->get()->row();
         return $query;
     }
@@ -115,36 +123,64 @@ class Account_model extends CI_Model
         $query = $this->db->get()->row();
         return $query;
     }
+
     function getRooms($id, $userid)
     {
-        $this->db->select('*,zoho_rooms.id as id');
+        $this->db->select('*, rooms.id as id');
+        $this->db->from('rooms');
+        // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
+        // $this->db->where("account_name", $userid);
+        $this->db->where("building_id", $id);
+        $query = $this->db->get()->result();
+        return $query;
+
+        /* $this->db->select('*,zoho_rooms.id as id');
         $this->db->from('zoho_rooms');
         // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
         // $this->db->where("account_name", $userid);
         $this->db->where("building", $id);
         $query = $this->db->get()->result();
-        return $query;
+        return $query; */
     }
+    
     function getRoomsByID($id, $userid)
     {
-        $this->db->select('*,zoho_rooms.id as id');
+        $this->db->select('*, rooms.id as id');
+        $this->db->from('rooms');
+        // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
+        // $this->db->where("account_name", $userid);
+        $this->db->where("rooms.id", $id);
+        $query = $this->db->get()->row();
+        return $query;
+
+        /* $this->db->select('*,zoho_rooms.id as id');
         $this->db->from('zoho_rooms');
         // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
         // $this->db->where("account_name", $userid);
         $this->db->where("zoho_rooms.id", $id);
         $query = $this->db->get()->row();
-        return $query;
+        return $query; */
     }
     function getComponents($id, $userid)
     {
-        $this->db->select('*, zoho_components.id as id');
+        $this->db->select('*, products.*, components.id as id');
+        $this->db->from('components');
+        // $this->db->join('zoho_rooms',"zoho_rooms.id=components.room");
+        // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
+        // $this->db->where("account_name", $userid);
+        $this->db->where("room_id", $id);
+        $this->db->join('products', 'products.id = components.product_id');
+        $query = $this->db->get()->result();
+        return $query;
+
+        /* $this->db->select('*, zoho_components.id as id');
         $this->db->from('zoho_components');
         // $this->db->join('zoho_rooms',"zoho_rooms.id=zoho_components.room");
         // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
         // $this->db->where("account_name", $userid);
         $this->db->where("room", $id);
         $query = $this->db->get()->result();
-        return $query;
+        return $query; */
     }
     function getComponentsByID($id, $userid)
     {

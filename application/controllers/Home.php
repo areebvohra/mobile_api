@@ -25,7 +25,7 @@ class Home extends USER_Controller
         $this->response(array('status' => 'success', 'token' => $token, 'data' => $response));
     }
     public function building_get()
-    {
+    {        
         $home = $this->Account_model->getHome($this->user_id);
         $rooms = $this->Account_model->getRooms($home ? $home->id : '', $this->user_id);
         $response = array(
