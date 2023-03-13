@@ -19,12 +19,14 @@ class Product_model extends CI_Model
         parent::__construct();
     }
 
-    function getProducts($category_id)
-    {
+    function getProducts($category_id, $user_id)
+    {        
         try {
-            $this->db->select('id, name, sku, details, description, price, image_path');
+            $this->db->select('products.id, name, sku, details, description, price, image_path, product_wishlist.is_in_wishlist');
             $this->db->from($this->table);
-            if($category_id) { $this->db->where('product_category_id', $category_id); }
+            $this->db->join('product_wishlist', 'product_wishlist.product_id = products.id', 'left');
+            $this->db->where('product_wishlist.user_id', $user_id);
+            if($category_id) { $this->db->where('products.product_category_id', $category_id); }
 
             $query = $this->db->get()->result();
             return $query;

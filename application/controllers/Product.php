@@ -7,7 +7,7 @@
  */
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Product extends BASE_Controller
+class Product extends USER_Controller /* BASE_Controller */ 
 {
     public function __construct()
     {
@@ -24,8 +24,8 @@ class Product extends BASE_Controller
      * product list
      */
     public function list_get($category_id = false)
-    {
-        $products = $this->Product_model->getProducts($category_id);
+    {                
+        $products = $this->Product_model->getProducts($category_id, $this->user_id);
         
         /* $this->load->model('Product_Wishlist_model');
         for ($i=0; $i < count($products); $i++) {
