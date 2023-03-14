@@ -100,23 +100,25 @@ class Product_Wishlist_model extends CI_Model
     function getProductByFilteration($filter) 
     {
         try {
-            $select = 'products.*, product_wishlist.*';
-            if($filter['building_id']) $this->db->where('building_id', $filter['building_id']);
+            $select = 'products.*, product_wishlist.user_id, product_wishlist.building_id, product_wishlist.room_id, product_wishlist.quantity, product_wishlist.unit_price, product_wishlist.total_price, product_wishlist.status, product_wishlist.is_in_wishlist';
+            if($filter['building_id']) $this->db->where('product_wishlist.building_id', $filter['building_id']);
             
             if($filter['room_id']) {
-                $select .= ', zoho_rooms.name as room_name';                
+                $select .= ', rooms.name as room_name';
                 $this->db->where('room_id', $filter['room_id']);
-                $this->db->join('zoho_rooms', 'zoho_rooms.id = product_wishlist.room_id');
+                $this->db->join('rooms', 'rooms.id = product_wishlist.room_id');
             }
             
             if($filter['product_category_id']) {
-                $this->db->where('product_category_id', $filter['product_category_id']);
+                $this->db->where('product_wishlist.product_category_id', $filter['product_category_id']);
             }
 
-            if(!$filter['product_category_id']) $this->db->where('is_in_wishlist', 1);
+            if(!$filter['product_category_id']) $this->db->where('is_in_wishlist', 1);            
 
             $this->db->select($select);
             $this->db->join('products', 'products.id = product_wishlist.product_id');
+
+            $this->db->where('product_wishlist.status', 0);
 
             return $this->db->get($this->table)->result();            
         } catch (Exception $e) {

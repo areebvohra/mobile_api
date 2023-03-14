@@ -25,7 +25,7 @@ class Product_model extends CI_Model
             $this->db->select('products.id, name, sku, details, description, price, image_path, product_wishlist.is_in_wishlist');
             $this->db->from($this->table);
             $this->db->join('product_wishlist', 'product_wishlist.product_id = products.id', 'left');
-            $this->db->where('product_wishlist.user_id', $user_id);
+            // $this->db->where('product_wishlist.user_id', $user_id);
             if($category_id) { $this->db->where('products.product_category_id', $category_id); }
 
             $query = $this->db->get()->result();
