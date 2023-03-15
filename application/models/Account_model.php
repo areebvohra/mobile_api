@@ -124,13 +124,18 @@ class Account_model extends CI_Model
         return $query;
     }
 
-    function getRooms($id, $userid)
-    {
-        $this->db->select('*, rooms.id as id');
+    function getRooms($id, $userid, $is_wishlist = false)
+    {        
+        $this->db->select('rooms.*, rooms.id as id');
         $this->db->from('rooms');
-        // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
+        
+        if($is_wishlist) {
+            $this->db->join('product_wishlist', 'product_wishlist.room_id = rooms.id');
+            $this->db->where('product_wishlist.is_in_wishlist', 1);
+        }
+        
         // $this->db->where("account_name", $userid);
-        $this->db->where("building_id", $id);
+        $this->db->where('rooms.building_id', $id);
         $query = $this->db->get()->result();
         return $query;
 
