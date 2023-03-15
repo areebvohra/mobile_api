@@ -100,7 +100,7 @@ class Product_Wishlist_model extends CI_Model
     function getProductByFilteration($filter) 
     {
         try {
-            $select = 'products.*, rooms.name as room_name, rooms.occupant_name as occupant_name, product_category.name as product_category, product_wishlist.user_id, product_wishlist.building_id, product_wishlist.room_id, product_wishlist.quantity, product_wishlist.unit_price, product_wishlist.total_price, product_wishlist.status, product_wishlist.is_in_wishlist';
+            $select = 'products.*, rooms.name as room_name, rooms.occupant_name as occupant_name, rooms.floor as floor, product_category.name as product_category, product_wishlist.user_id, product_wishlist.building_id, product_wishlist.room_id, product_wishlist.quantity, product_wishlist.unit_price, product_wishlist.total_price, product_wishlist.status, product_wishlist.is_in_wishlist';
             if($filter['building_id']) $this->db->where('product_wishlist.building_id', $filter['building_id']);
             
             $this->db->join('rooms', 'rooms.id = product_wishlist.room_id');
