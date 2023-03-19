@@ -20,13 +20,13 @@ class Product_model extends CI_Model
     }
 
     function getProducts($category_id, $user_id)
-    {        
+    {                
         try {
-            $this->db->select('products.id, name, sku, details, description, price, image_path, product_wishlist.is_in_wishlist');
+            $this->db->select('products.id, name, sku, details, description, price, image_path, product_wishlist.is_in_wishlist, product_wishlist.room_id, product_wishlist.product_category_id');
             $this->db->from($this->table);
             $this->db->join('product_wishlist', 'product_wishlist.product_id = products.id', 'left');
             // $this->db->where('product_wishlist.user_id', $user_id);
-            if($category_id) { $this->db->where('products.product_category_id', $category_id); }
+            if($category_id) { $this->db->where('products.product_category_id', $category_id); }            
 
             $query = $this->db->get()->result();
             return $query;
