@@ -104,7 +104,7 @@ class Account_model extends CI_Model
         return $query; */
     }
     function getHome($id)
-    {                
+    {
         $this->db->select('*');
         /* $this->db->from('zoho_buildings');
         $this->db->where("account_name", $id); */
@@ -228,6 +228,38 @@ class Account_model extends CI_Model
         $this->db->from('zoho_components');
         $this->db->where("buildiings", $id);
         $query = $this->db->get()->result();
+        return $query;
+    }
+
+    public function totalSnags($building_id) {
+        $this->db->where('building_id', $building_id);
+        $query = $this->db->get('snags')->num_rows();
+        
+        return $query;
+    }
+
+    public function totalSafetyNotice($building_id) {
+        $this->db->where('building_id', $building_id);
+        $query = $this->db->get('safety_notice')->num_rows();
+        
+        return $query;
+    }
+
+    public function getSnags($room_id) {
+        $this->db->select('snag_attachments.image, snag_attachments.notes');
+        $this->db->where('room_id', $room_id);
+        $this->db->join('snag_attachments', 'snag_attachments.snag_id = snags.id');
+        $query = $this->db->get('snags')->result();
+        
+        return $query;
+    }
+
+    public function getSafetyNotices($room_id) {
+        $this->db->select('safety_notice_attachments.image, safety_notice_attachments.notes');
+        $this->db->where('room_id', $room_id);
+        $this->db->join('safety_notice_attachments', 'safety_notice_attachments.safety_notice_id = safety_notice.id');
+        $query = $this->db->get('safety_notice')->result();
+        
         return $query;
     }
 }

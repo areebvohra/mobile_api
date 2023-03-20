@@ -13,6 +13,7 @@ class Product extends USER_Controller /* BASE_Controller */
     {
         parent::__construct();
         $this->load->model('Product_model');
+        $this->load->model('Product_Wishlist_model');
     }
 
     public function index_get($id)
@@ -26,23 +27,22 @@ class Product extends USER_Controller /* BASE_Controller */
     public function list_get($category_id = false, $room_id = false)
     {        
         $products = $this->Product_model->getProducts($category_id, $room_id, $this->user_id);
+        $wishlist_product_ids = [];
         
-        if($room_id) {            
-            for ($i=0; $i < count($products) ; $i++) {                 
-                if($products[$i]->product_category_id == $category_id && $products[$i]->room_id == $room_id){ 
-                    $products[$i]->is_in_wishlist = $products[$i]->is_in_wishlist;
-                } else {
+        if($category_id || $room_id) {
+            $wishlist_products = $this->Product_Wishlist_model->isWishlistProducts($this->user_id, $category_id, $room_id);
+            for ($i=0; $i < count($wishlist_products); $i++) {
+                $wishlist_product_ids[] = $wishlist_products[$i]->product_id;
+            }
+            
+            for ($i=0; $i < count($products); $i++) {
+                if(in_array($products[$i]->id, $wishlist_product_ids)) {
+                    $products[$i]->is_in_wishlist = 1;
+                } else {            
                     $products[$i]->is_in_wishlist = 0;
                 }
-                
             }
         }
-        
-        /* $this->load->model('Product_Wishlist_model');
-        for ($i=0; $i < count($products); $i++) {
-            $is_in_wishlist = $this->Product_Wishlist_model->getWhisListByProductAndCategoryID($products[$i]->category_id, $products[$i]->id);
-            $products[$i]->is_in_wishlist = $is_in_wishlist->is_in_wishlist == '1' ? 1 : 0;
-        } */
         
         $this->response(array('status' => 'success', 'data' => $products));
     }

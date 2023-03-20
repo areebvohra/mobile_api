@@ -24,6 +24,7 @@ class Home extends USER_Controller
         );
         $this->response(array('status' => 'success', 'token' => $token, 'data' => $response));
     }
+    
     public function building_get($data = false)
     {        
         $home = $this->Account_model->getHome($this->user_id);
@@ -33,12 +34,19 @@ class Home extends USER_Controller
         }  else {
             $rooms = $this->Account_model->getRooms($home ? $home->id : '', $this->user_id);
         }
+
         $response = array(
-            'home' => $home,
-            'rooms' => $rooms,
+            'home' => $home, 'rooms' => $rooms,
+            'total_snag' => 0, 'total_safety_notice' => 0,
         );
+
+        if($home->id) {
+            $response['total_snag'] = $this->Account_model->totalSnags($home->id);
+            $response['total_safety_notice'] = $this->Account_model->totalSafetyNotice($home->id);
+        }
         $this->response(array('status' => 'success', 'data' => $response));
     }
+
     public function room_get($building)
     {
         $room = $this->Account_model->getRoomsByID($building, $this->user_id);
@@ -46,7 +54,15 @@ class Home extends USER_Controller
         $response = array(
             'room' => $room,
             'components' => $components,
+            'snags' => [],
+            'safety_notice' => [],
         );
+
+        if($room->id) {
+            $response['snags'] = $this->Account_model->getSnags($room->id);
+            $response['safety_notice'] = $this->Account_model->getSafetyNotices($room->id);
+        }
+
         $this->response(array('status' => 'success', 'data' => $response));
     }
     public function component_get($room)
