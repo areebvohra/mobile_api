@@ -161,4 +161,26 @@ class Product_Wishlist_model extends CI_Model
             return $e->getMessage();
         }
     }
+
+    /**
+     * get is wishlist product
+     * @param $data Array
+     */
+    function isWishlistProducts($user_id, $category_id, $room_id)
+    {
+        try {
+            $this->db->where('user_id', $user_id);
+            $this->db->where('is_in_wishlist', 1);
+            $this->db->from($this->table);
+
+            if($category_id) { $this->db->where('product_category_id', $category_id); }
+            if($room_id) { $this->db->where('room_id', $room_id); }
+
+            $query = $this->db->get()->result();
+            
+            return $query;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
 }
