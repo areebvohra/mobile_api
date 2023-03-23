@@ -126,8 +126,10 @@ class Account_model extends CI_Model
 
     function getRooms($id, $userid, $is_wishlist = false)
     {        
-        $this->db->select('rooms.*, rooms.id as id');
+        $this->db->select('rooms.*, rooms.id as id, floors.name as floor, room_names.name as name');
         $this->db->from('rooms');
+        $this->db->join('floors', 'floors.id = rooms.floor_id', 'left');
+        $this->db->join('room_names', 'room_names.id = rooms.room_name_id', 'left');
         
         if($is_wishlist) {
             $this->db->join('product_wishlist', 'product_wishlist.room_id = rooms.id');
@@ -150,8 +152,12 @@ class Account_model extends CI_Model
     
     function getRoomsByID($id, $userid)
     {
-        $this->db->select('*, rooms.id as id');
+        $this->db->select('*, rooms.id as id, floors.name as floor, room_names.name as name');
         $this->db->from('rooms');
+
+        $this->db->join('floors', 'floors.id = rooms.floor_id', 'left');
+        $this->db->join('room_names', 'room_names.id = rooms.room_name_id', 'left');
+
         // $this->db->join('zoho_buildings',"zoho_buildings.id=zoho_rooms.building");
         // $this->db->where("account_name", $userid);
         $this->db->where("rooms.id", $id);
