@@ -130,6 +130,7 @@ class Account_model extends CI_Model
         $this->db->from('rooms');
         $this->db->join('floors', 'floors.id = rooms.floor_id', 'left');
         $this->db->join('room_names', 'room_names.id = rooms.room_name_id', 'left');
+        $this->db->order_by('rooms.occupant_name', 'asc');
         
         if($is_wishlist) {
             $this->db->join('product_wishlist', 'product_wishlist.room_id = rooms.id');
