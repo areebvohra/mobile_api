@@ -25,8 +25,22 @@ class Product extends USER_Controller /* BASE_Controller */
      * product list
      */
     public function list_get($category_id = false, $room_id = false)
-    {        
-        $products = $this->Product_model->getProducts($category_id, $room_id, $this->user_id);
+    {
+        $wishlist_product = $this->Product_Wishlist_model->isWishlistByIDs($this->user_id, $category_id, $room_id);
+        $products = $this->Product_model->getProducts($category_id, $room_id, $this->user_id);    
+        
+        for ($i=0; $i < count($products); $i++) {
+            if($wishlist_product->product_id == $products[$i]->id) {
+                $products[$i]->is_in_wishlist = 1;
+            } else {            
+                $products[$i]->is_in_wishlist = 0;
+            }
+        }
+
+        $this->response(array('status' => 'success', 'data' => $products));
+        
+
+        /* $products = $this->Product_model->getProducts($category_id, $room_id, $this->user_id);
         $wishlist_product_ids = [];
         
         if($category_id || $room_id) {
@@ -44,7 +58,7 @@ class Product extends USER_Controller /* BASE_Controller */
             }
         }
         
-        $this->response(array('status' => 'success', 'data' => $products));
+        $this->response(array('status' => 'success', 'data' => $products)); */
     }
     
     /**
