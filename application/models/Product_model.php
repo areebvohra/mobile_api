@@ -19,15 +19,15 @@ class Product_model extends CI_Model
         parent::__construct();
     }
 
-    function getProducts($category_id, $room_id, $user_id)
+    function getProducts($category_id = false, $room_id = false)
     {                
         try {
             $this->db->select('products.id, name, sku, details, description, price, image_path');
             $this->db->from($this->table);
             $this->db->join('product_wishlist', 'product_wishlist.product_category_id = products.product_category_id', 'left');
             
-            $this->db->where('products.product_category_id', $category_id);
-            $this->db->where('product_wishlist.room_id', $room_id);
+            if($category_id) $this->db->where('products.product_category_id', $category_id);
+            if($room_id) $this->db->where('product_wishlist.room_id', $room_id);
             $this->db->where('product_wishlist.is_in_wishlist', 1);
 
             $query = $this->db->get()->result();

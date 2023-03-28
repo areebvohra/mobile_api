@@ -26,8 +26,11 @@ class Product extends USER_Controller /* BASE_Controller */
      */
     public function list_get($category_id = false, $room_id = false)
     {
-        $wishlist_product = $this->Product_Wishlist_model->isWishlistByIDs($this->user_id, $category_id, $room_id);
-        $products = $this->Product_model->getProducts($category_id, $room_id, $this->user_id);    
+        $products = [];
+        $wishlist_product = $this->Product_Wishlist_model->isWishlistByIDs($this->user_id, $category_id, $room_id);        
+        if($wishlist_product) {
+            $products = $this->Product_model->getProducts($category_id, $room_id);
+        }
         
         for ($i=0; $i < count($products); $i++) {
             if($wishlist_product->product_id == $products[$i]->id) {
