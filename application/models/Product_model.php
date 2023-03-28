@@ -27,8 +27,10 @@ class Product_model extends CI_Model
             $this->db->join('product_wishlist', 'product_wishlist.product_category_id = products.product_category_id', 'left');
             
             if($category_id) $this->db->where('products.product_category_id', $category_id);
-            if($room_id) $this->db->where('product_wishlist.room_id', $room_id);
-            $this->db->where('product_wishlist.is_in_wishlist', 1);
+            if($room_id) {
+                $this->db->where('product_wishlist.room_id', $room_id);
+                $this->db->where('product_wishlist.is_in_wishlist', 1);
+            }
 
             $query = $this->db->get()->result();
             // var_dump($this->db->last_query()); die;
