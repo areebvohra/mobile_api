@@ -245,8 +245,24 @@ class Account_model extends CI_Model
         return $query;
     }
 
+    public function totalSnagAttachments($building_id) {
+        $this->db->where('snags.building_id', $building_id);
+        $this->db->join('snag_attachments', 'snag_attachments.snag_id = snags.id', 'join');
+        $query = $this->db->get('snags')->num_rows();
+        
+        return $query;
+    }
+
     public function totalSafetyNotice($building_id) {
         $this->db->where('building_id', $building_id);
+        $query = $this->db->get('safety_notice')->num_rows();
+        
+        return $query;
+    }
+
+    public function totalSafetyNoticeAttachments($building_id) {
+        $this->db->where('safety_notice.building_id', $building_id);
+        $this->db->join('safety_notice_attachments', 'safety_notice_attachments.safety_notice_id = safety_notice.id', 'join');
         $query = $this->db->get('safety_notice')->num_rows();
         
         return $query;

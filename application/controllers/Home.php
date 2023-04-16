@@ -41,8 +41,10 @@ class Home extends USER_Controller
         );
 
         if($home->id) {
-            $response['total_snag'] = $this->Account_model->totalSnags($home->id);
-            $response['total_safety_notice'] = $this->Account_model->totalSafetyNotice($home->id);
+            // $response['total_snag'] = $this->Account_model->totalSnags($home->id);
+            $response['total_snag'] = $this->Account_model->totalSnagAttachments($home->id);
+            $response['total_safety_notice'] = $this->Account_model->totalSafetyNoticeAttachments($home->id);
+            // $response['total_safety_notice'] = $this->Account_model->totalSafetyNotice($home->id);
         }
         $this->response(array('status' => 'success', 'data' => $response));
     }
